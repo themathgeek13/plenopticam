@@ -79,8 +79,6 @@ setup(
       name='plenopticam',
       version=__version__,
       description='Light field photography application',
-      long_description=long_description,
-      long_description_content_type='text/x-rst',
       url='http://github.com/hahnec/plenopticam',
       author='Christopher Hahne',
       author_email='inbox@christopherhahne.de',

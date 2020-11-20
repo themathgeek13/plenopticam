@@ -14,6 +14,7 @@
 /.idea/
 
 # plenopticam folders
+data/
 releases/
 examples/data/
 docs/build/doctrees/
