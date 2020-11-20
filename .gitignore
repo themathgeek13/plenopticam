@@ -10,8 +10,9 @@
 # pyinstaller files
 *.spec
 
-# PyCharm settings
+# PyCharm/VSCode settings
 /.idea/
+.vscode
 
 # plenopticam folders
 data/
