@@ -29,13 +29,13 @@ class SynthesisPipeline(object):
         self.t  = kwargs['t'] if 't' in kwargs else 0.2
         self.D1A = kwargs['D1A'] if 'D1A' in kwargs else 0.9
         self.u0 = kwargs['u0'] if 'u0' in kwargs else None
-        self.zoom_factor = kwargs['zoom_factor'] if 'zoom_factor' in kwargs else 0.95
+        self.zoom_factor = kwargs['zoom_factor'] if 'zoom_factor' in kwargs else 0.8
 
     def generate_synthesized_views(self, inputimg, inputdepth):
         x1A, y1A, __ = np.indices(inputimg.shape)
         H, W, C = inputimg.shape
         if self.u0 is None:
-            self.u0 = inputimg[H//2, W//2]
+            self.u0 = [H//2, W//2]
 
         x1B = self.D1A*(self.D0-self.t)*x1A/(self.D0*(self.D1A-self.t)) + self.t*(self.D1A-self.D0)*self.u0[0]/(self.D0*(self.D1A-self.t))
         x1B = x1B.astype(np.uint16).transpose(2,0,1)
@@ -45,13 +45,8 @@ class SynthesisPipeline(object):
         synthimg = np.zeros_like(inputimg)
         synthdepth = np.zeros_like(inputdepth)
         for i in range(C):
-            x1Bch = x1B[i].flatten()
-            y1Bch = y1B[i].flatten()
-
-            pos = np.array((x1Bch, y1Bch, np.ones(len(x1Bch))*i))
-            pos = pos.astype(np.int)
-            synthimg[:,:,i] = inputimg[pos[0], pos[1], pos[2]].reshape((H,W))
-            synthdepth[:,:,i] = inputdepth[pos[0], pos[1], pos[2]].reshape((H,W))
+            synthimg[:,:,i] = inputimg[x1B[i], y1B[i], i]
+            synthdepth[:,:,i] = inputdepth[x1B[i], y1B[i], i]
 
         return synthimg, synthdepth
 
@@ -60,7 +55,7 @@ class SynthesisPipeline(object):
         H, W, C = inputimg.shape
 
         if self.u0 is None:
-            self.u0 = inputimg[H//2, W//2]
+            self.u0 = [H//2, W//2]
 
         x1B = self.zoom_factor*x1A + (1-self.zoom_factor)*self.u0[0]
         x1B = x1B.astype(np.uint16).transpose(2,0,1)
@@ -70,21 +65,18 @@ class SynthesisPipeline(object):
         zoomimg = np.zeros_like(inputimg)
         zoomdepth = np.zeros_like(inputimg)
         for i in range(C):
-            x1Bch = x1B[i].flatten()
-            y1Bch = y1B[i].flatten()
-
-            pos = np.array((x1Bch, y1Bch, np.ones(len(x1Bch))*i))
-            pos = pos.astype(np.int)
-            zoomimg[:,:,i] = inputimg[pos[0], pos[1], pos[2]].reshape((H,W))
-            zoomdepth[:,:,i] = inputimg[pos[0], pos[1], pos[2]].reshape((H,W))
+            zoomimg[:,:,i] = inputimg[x1B[i], y1B[i], i]
+            zoomdepth[:,:,i] = inputdepth[x1B[i], y1B[i], i]
 
         return zoomimg, zoomdepth
 
 if __name__ == '__main__':
     I = np.load("/home/rohan/PycharmProjects/plenopticam/data/allfocus.npy")
     D = np.load("/home/rohan/PycharmProjects/plenopticam/data/depthmap.npy")
-    sp = SynthesisPipeline()
+    H, W, C = I.shape
+    kwargs = {'D0': 0.3, 't': 0.2, 'D1A': 0.9, 'u0': [2*H//3, W//2], 'zoom_factor': 0.9}
+    sp = SynthesisPipeline(**kwargs)
     I1, D1 = sp.generate_digital_zoom(I, D)
     I2, D2 = I.copy(), D.copy()
-    I1DZ, D2DZ = sp.generate_synthesized_views(I1, D1)
+    I1DZ, D1DZ = sp.generate_synthesized_views(I1, D1)
     I2DZ, D2DZ = sp.generate_synthesized_views(I2, D2)
