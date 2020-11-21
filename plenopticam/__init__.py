@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-__author__ = "Christopher Hahne"
-__email__ = "inbox@christopherhahne.de"
+__author__ = "Christopher Hahne and Rohan Rao"
+__email__ = "rgrao@andrew.cmu.edu"
 __license__ = """
-    Copyright (c) 2020 Christopher Hahne <inbox@christopherhahne.de>
+    Copyright (c) 2020 Rohan Rao <rgrao@andrew.cmu.edu>
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@ __license__ = """
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-__version__ = '0.6.4'
+__version__ = '0.6.5'
 
 from . import misc
 from . import cfg
