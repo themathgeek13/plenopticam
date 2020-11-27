@@ -1,6 +1,9 @@
-=============================================================================
-15-663 Computational Photography Fall 2020 Course Project at Carnegie Mellon University
-=============================================================================
+This is an extension of the open-source *PlenoptiCam* software for light field computation, which implements the CVPR 2020 paper "The Vertigo Effect on Your Smartphone: Dolly Zoom via Single Shot View Synthesis". (https://openaccess.thecvf.com/content_CVPRW_2020/papers/w21/Liang_The_Vertigo_Effect_on_Your_Smartphone_Dolly_Zoom_via_Single_CVPRW_2020_paper.pdf). It is part of the course project for 15-663 Computational Photography in Fall 2020 at Carnegie Mellon University.
+
+
+Rest of the unedited README is below.
+
+------
 
 ===========
 PlenoptiCam
